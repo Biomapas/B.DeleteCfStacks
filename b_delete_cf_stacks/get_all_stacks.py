@@ -20,8 +20,9 @@ class GetAllStacks:
         'IMPORT_ROLLBACK_COMPLETE',
     ]
 
-    def __init__(self, boto_session: Session) -> None:
+    def __init__(self, boto_session: Session, stacks_prefix: Optional[str] = None) -> None:
         self.__cf = boto_session.client('cloudformation')
+        self.__stacks_prefix = stacks_prefix or ''
 
     def get(self) -> List[Stack]:
         stacks, next_token = self.__get()
@@ -50,4 +51,5 @@ class GetAllStacks:
 
         response = self.__cf.list_stacks(**kwargs)
         stacks = [Stack(stack) for stack in response['StackSummaries']]
+        stacks = [stack for stack in stacks if stack.stack_name.startswith(self.__stacks_prefix)]
         return stacks, response.get('NextToken')

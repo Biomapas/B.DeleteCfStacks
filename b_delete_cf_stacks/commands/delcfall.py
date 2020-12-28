@@ -12,6 +12,7 @@ def main() -> None:
     """
     profile = input('Name of the AWS profile: ')
     region = input('AWS region: ')
+    prefix = input('Prefix of the stacks [None]: ') or None
     ans = input('Are you absolutely sure you want to delete all stacks? [y/n]: ')
 
     if ans == 'y':
@@ -21,7 +22,7 @@ def main() -> None:
         )
 
         try:
-            DeleteStacks(boto_session=boto_session).execute()
+            DeleteStacks(boto_session=boto_session, stacks_prefix=prefix).execute()
         except RecursionError:
             stacks = GetAllStacks(boto_session).get()
             stacks_readable = '\n'.join([stack.stack_name for stack in stacks])

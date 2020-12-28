@@ -8,15 +8,15 @@ class Stack:
         self.__stack_status = stack_summary['StackStatus']
 
     @property
-    def stack_id(self):
+    def stack_id(self) -> str:
         return self.__stack_id
 
     @property
-    def stack_name(self):
+    def stack_name(self) -> str:
         return self.__stack_name
 
     @property
-    def stack_status(self):
+    def stack_status(self) -> str:
         return self.__stack_status
 
     def __str__(self) -> str:

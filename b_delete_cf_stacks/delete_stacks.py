@@ -9,8 +9,9 @@ from b_delete_cf_stacks.stack import Stack
 class DeleteStacks:
     __DELETION_INTERVAL = 60
 
-    def __init__(self, boto_session: Session):
+    def __init__(self, boto_session: Session, stacks_prefix: Optional[str] = None):
         self.__boto_session = boto_session
+        self.__stacks_prefix = stacks_prefix
 
     def execute(self) -> None:
         self.__execute()
@@ -24,7 +25,7 @@ class DeleteStacks:
         if same_stacks_iteration == max_same_stacks_iterations:
             raise RecursionError('Max iterations reached. Existing script...')
 
-        stacks = GetAllStacks(self.__boto_session).get() or []
+        stacks = GetAllStacks(self.__boto_session, self.__stacks_prefix).get() or []
         previous_stacks = previous_stacks or []
 
         if len(previous_stacks) == len(stacks):
